@@ -1,0 +1,4 @@
+# The citation record is repository metadata rather than package data, so it
+# is not installed; it is included here so a source distribution still carries
+# the reference a user is asked to cite.
+include CITATION.cff

@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use GeoBrain in your research, please cite it as below."
+title: "GeoBrain: An End-to-End Differentiable Platform for Integrated Subsurface Modeling"
+abstract: >-
+  GeoBrain is an open, modular platform for Geoscientific Bayesian Reasoning
+  with Artificial Intelligence. It combines differentiable physics, Bayesian
+  inference and deep learning so that a whole subsurface workflow, from a
+  geostatistical earth model through rock physics to a geophysical forward
+  model and back out as an inversion, is one computational graph. Every
+  forward model is a composable operator, every operator declares how it
+  differentiates, and the same problem object serves a deterministic
+  optimiser and a posterior sampler alike.
+type: software
+authors:
+  - family-names: Liu
+    given-names: Mingliang
+    email: mingliangliu@sdu.edu.cn
+version: 0.2.0
+date-released: "2026-08-19"
+license: Apache-2.0
+repository-code: "https://github.com/GeoBrain-Project/GeoBrain"
+url: "https://github.com/GeoBrain-Project/GeoBrain"
+keywords:
+  - geophysics
+  - inverse problems
+  - differentiable programming
+  - Bayesian inference
+  - geostatistics
+  - seismic
+  - electromagnetics
+  - reservoir simulation
+  - PyTorch

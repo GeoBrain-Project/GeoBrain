@@ -1,0 +1,27 @@
+# Build products
+docs/_build/
+*.egg-info/
+build/
+dist/
+
+# Caches
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Editors and tooling
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.claude/*
+
+# Fetched: the Marmousi II sections, which are past the 100 MB per-file
+# ceiling a git host accepts. examples/data/fetch_marmousi.py puts them
+# here and verifies them against a recorded digest.
+examples/data/marmousi/
+
+# Generated: gallery figures staged into the docs by docs/conf.py
+docs/_figures/

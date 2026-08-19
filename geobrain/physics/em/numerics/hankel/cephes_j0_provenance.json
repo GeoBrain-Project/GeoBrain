@@ -1,0 +1,24 @@
+{
+  "schema": "geobrain.em-cephes-provenance/1.0",
+  "version": "0.2.0",
+  "component": "torch Cephes J0 float64 approximation",
+  "upstream": {
+    "project": "scipy/xsf",
+    "scipy_release": "v1.17.0",
+    "scipy_commit": "8c75ae75176236f233824e9a0483c26a69e6dfec",
+    "xsf_commit": "0d0a593fd31073af10062d0093144e13ae34f8f3",
+    "path": "include/xsf/cephes/j0.h",
+    "sha256": "f77c6ae81b9d7740b884d8a9c7499a5d0ff7d7534bc49326545cc97bd8c49d09"
+  },
+  "license": {
+    "identifier": "BSD-3-Clause",
+    "notice_file": "CEPHES_J0_LICENSE.txt",
+    "copyright": [
+      "Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier",
+      "Copyright (c) 2024, SciPy"
+    ],
+    "upstream_license_path": "LICENSE",
+    "upstream_license_sha256": "632f86f8bd24a264ac49c002f39866f407a38e8cbd8a6568df7596cc7fbe0048"
+  },
+  "transformation": "Coefficient-preserving Python/torch translation of xsf Cephes j0; tensor operations replace scalar C++ evaluation for CPU/CUDA autograd."
+}

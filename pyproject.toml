@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geobrain"
+dynamic = ["version"]
+description = "An end-to-end differentiable platform for integrated subsurface modeling"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+# PEP 639 licence files. The third-party notice belongs here rather than
+# in MANIFEST.in: it carries the CC-BY-4.0 attribution for the Hankel
+# filter coefficients, which travel inside both the wheel and the sdist,
+# so the notice has to travel with them.
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md"]
+authors = [{ name = "Mingliang Liu", email = "mingliangliu@sdu.edu.cn" }]
+keywords = [
+    "geophysics",
+    "inverse-problems",
+    "differentiable-programming",
+    "bayesian-inference",
+    "geostatistics",
+    "seismic",
+    "electromagnetics",
+    "reservoir-simulation",
+    "pytorch",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+]
+
+# The floor is what `import geobrain` itself needs. Everything else is an
+# extra, keyed to the subpackage that cannot be imported without it, so a
+# reader can tell from the name what they are buying. `jsonschema` is here
+# rather than in an extra because `geobrain.physics.flow` imports it at the
+# top level: making it optional would turn a headline physics family into a
+# bare ModuleNotFoundError with no install hint.
+dependencies = [
+    "torch>=2.0",
+    "numpy>=1.22",
+    "scipy>=1.8",
+    "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+# geobrain.vis raises with an install hint if this is absent.
+vis = ["matplotlib>=3.5"]
+# Per-format readers and writers in geobrain.io, each guarded at the call site.
+io = ["h5py>=3.0", "segyio>=1.9", "lasio>=0.30", "meshio>=5.0"]
+# The interactive 3-D scene (Scene3D, the view_* helpers) and its notebook path.
+viewer = ["pyvista>=0.44", "plotly>=5.0", "ipython>=8.0"]
+# Delaunay triangulation for building an UnstructuredMesh from points.
+mesh = ["triangle>=20230923"]
+# Thread pinning for the parallel geostatistical simulators.
+parallel = ["threadpoolctl>=3.0"]
+# What the examples gallery needs to run end to end.
+examples = [
+    "geobrain[vis,io,mesh,parallel]",
+]
+all = [
+    "geobrain[vis,io,viewer,mesh,parallel]",
+]
+
+[project.urls]
+Homepage = "https://github.com/GeoBrain-Project/GeoBrain"
+Documentation = "https://github.com/GeoBrain-Project/GeoBrain/tree/main/docs"
+Repository = "https://github.com/GeoBrain-Project/GeoBrain"
+Issues = "https://github.com/GeoBrain-Project/GeoBrain/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "geobrain._version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["geobrain*"]
+
+# Data the package cannot work without: the digital-linear-filter coefficient
+# tables and their provenance and licence records, the CUDA sources the wave
+# engine compiles at run time, the flow unit-boundary note, and the PEP 561
+# marker that makes the shipped type hints visible to a type checker.
+[tool.setuptools.package-data]
+"*" = [
+    "py.typed",
+    "*.npz",
+    "*.json",
+    "*.txt",
+    "*.md",
+    "*.cu",
+]

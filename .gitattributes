@@ -1,0 +1,27 @@
+# Line endings are normalised to LF in the repository and in the working
+# copy. Without this the checkout platform leaks into commits: a Windows
+# contributor and a Linux one produce diffs that differ on every line of a
+# file neither of them meaningfully changed.
+* text=auto eol=lf
+
+# Files whose bytes are checked against a recorded digest, or that carry
+# measurement rather than prose. Git's binary heuristic already gets these
+# right, but it is a heuristic, and for the two filter-coefficient tables a
+# single converted byte would fail the SHA-256 check in
+# geobrain/physics/em/numerics/hankel/dlf.py with no obvious cause.
+*.npz  binary
+*.segy binary
+*.h5   binary
+*.mat  binary
+*.vtk  binary
+*.png  binary
+*.gif  binary
+*.pt   binary
+
+# CUDA sources are read and compiled at run time by the wave engine, so they
+# follow the same LF rule as the Python beside them.
+*.cu   text eol=lf
+
+# Keep the gallery output out of language statistics: the figures are
+# products of the scripts, not source.
+examples/*/out/** linguist-generated=true

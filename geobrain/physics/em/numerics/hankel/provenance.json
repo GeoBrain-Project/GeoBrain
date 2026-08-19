@@ -1,0 +1,72 @@
+{
+  "schema": "geobrain.em-hankel-provenance/1.0",
+  "version": "0.2.0",
+  "assets": {
+    "dlf_key_201_2012.npz": {
+      "filename": "dlf_key_201_2012.npz",
+      "sha256": "d2b77683ab251e8f38548998ec57f03e6241e550ba202662db731f5acd4bddf4",
+      "filter_family": "Hankel J0/J1 digital linear filter",
+      "coefficient_count": 201,
+      "coefficient_keys": ["base", "j0", "j1"],
+      "publication": {
+        "author": "Kerry Key",
+        "title": "Is the fast Hankel transform faster than quadrature?",
+        "journal": "Geophysics 77(3), F21-F30",
+        "year": 2012,
+        "doi": "10.1190/geo2011-0237.1"
+      },
+      "upstream": {
+        "project": "emsig/libdlf",
+        "release": "v0.3.0",
+        "commit": "bb95c97b87836f4374e56e6be6541aa3df53aee8",
+        "path": "lib/Hankel/hankel_key_201_2012_j0j1.txt"
+      },
+      "license": {
+        "identifier": "CC-BY-4.0",
+        "attribution": "Kerry Key (2012), DOI 10.1190/geo2011-0237.1; distributed by emsig/libdlf under CC BY 4.0."
+      },
+      "acquisition_date": "2026-07-09",
+      "transformation": "Repackaged from whitespace-delimited float64 columns to NPZ; no numerical transformation.",
+      "verification_command": [
+        "python",
+        "-m",
+        "pytest",
+        "tests/physics/electromagnetics/numerics/test_em_hankel_provenance.py",
+        "-q"
+      ]
+    },
+    "dlf_sincos_201.npz": {
+      "filename": "dlf_sincos_201.npz",
+      "sha256": "21456bfce38ba9392948459520783d869a5203a6c356c3d289daf703348f055e",
+      "filter_family": "Fourier sine/cosine digital linear filter",
+      "coefficient_count": 201,
+      "coefficient_keys": ["base", "sin", "cos"],
+      "publication": {
+        "author": "Kerry Key",
+        "title": "Is the fast Hankel transform faster than quadrature?",
+        "journal": "Geophysics 77(3), F21-F30",
+        "year": 2012,
+        "doi": "10.1190/geo2011-0237.1"
+      },
+      "upstream": {
+        "project": "emsig/libdlf",
+        "release": "v0.3.0",
+        "commit": "bb95c97b87836f4374e56e6be6541aa3df53aee8",
+        "path": "lib/Fourier/fourier_key_201_2012_sincos.txt"
+      },
+      "license": {
+        "identifier": "CC-BY-4.0",
+        "attribution": "Kerry Key (2012), DOI 10.1190/geo2011-0237.1; distributed by emsig/libdlf under CC BY 4.0."
+      },
+      "acquisition_date": "2026-07-09",
+      "transformation": "Repackaged from whitespace-delimited float64 columns to NPZ; no numerical transformation.",
+      "verification_command": [
+        "python",
+        "-m",
+        "pytest",
+        "tests/physics/electromagnetics/numerics/test_em_hankel_provenance.py",
+        "-q"
+      ]
+    }
+  }
+}

@@ -1,0 +1,232 @@
+:root {
+  --gb-rock: #173d34;
+  --gb-mineral: #376b5d;
+  --gb-sage: #829d78;
+  --gb-clay: #c6a469;
+  --gb-paper: #f7f6f0;
+  --gb-reading-width: 800px;
+  --gb-focus: #0b6bcb;
+}
+
+/* One ground, two levels.
+ *
+ * The page is the warm paper; anything meant to read as lifted off it (a
+ * code block, the mat a figure sits on, a table heading) is white. Setting
+ * only `body` is what produced the patchwork this replaces: the theme
+ * paints the two sidebars, the navbar and the article header bar from its
+ * own tokens, so they stayed white on a paper body, and code blocks came
+ * out a cool grey belonging to neither.
+ *
+ * The selector matches the theme's own, rather than `:root`, on purpose.
+ * `html[data-theme="light"]` scores one attribute higher than `:root`, so
+ * a `:root` block here would lose to the theme however late it loaded. */
+html[data-theme="light"],
+html:not([data-theme]) {
+  --pst-color-background: var(--gb-paper);
+  --pst-color-on-background: var(--gb-paper);
+  --pst-color-surface: #ffffff;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  background: var(--gb-paper);
+  color: var(--gb-rock);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+a {
+  color: var(--gb-mineral);
+}
+
+.bd-page-width,
+.bd-content,
+.bd-article {
+  min-width: 0;
+}
+
+.bd-main .bd-content .bd-article-container {
+  max-width: var(--gb-reading-width);
+}
+
+.skip-link {
+  background: var(--gb-rock);
+  color: #ffffff;
+  inset-block-start: -5rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.65rem 1rem;
+  position: fixed;
+  z-index: 2000;
+}
+
+.skip-link:focus {
+  inset-block-start: 0.5rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gb-focus);
+  outline-offset: 3px;
+}
+
+.bd-header-article .btn:focus-visible {
+  outline: 3px solid var(--gb-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+*::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+  }
+}
+
+/* Figures.
+ *
+ * Every figure here came out of examples/, so the frame is deliberately
+ * quiet: white mat, hairline rule, and the caption set apart by a clay
+ * rule on the left rather than by italics. The figures are wide (a row of
+ * map panels), so the wide ones carry the theme's `full-width` class and
+ * are recentred here rather than being allowed to run right across the
+ * page table of contents.
+ */
+figure {
+  margin: 1.9rem 0 2.1rem;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #ffffff;
+  padding: 0.45rem;
+  border: 1px solid rgba(23, 61, 52, 0.16);
+  border-radius: 3px;
+}
+
+figure figcaption,
+figure .caption {
+  margin-top: 0.6rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--gb-clay);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--gb-mineral);
+}
+
+figure figcaption p,
+figure .caption p {
+  margin: 0;
+}
+
+figure figcaption .caption-number {
+  display: none;
+}
+
+@media (min-width: 1200px) {figure.full-width {
+    margin-left: -18%;
+  }
+}
+
+@media (max-width: 1199px) {figure.full-width {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) {figure.gb-tall {
+    max-width: 62%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Light only, enforced.
+ *
+ * This stylesheet defines one palette and has no dark variant, so the
+ * page must never be rendered with the theme's dark tokens. Two things
+ * could still put it there: a `mode` left in localStorage by an earlier
+ * visit (the theme's inline script prefers the stored value over the
+ * configured default), and the `auto` mode following the operating
+ * system. force-light.js settles both before the theme's own script
+ * runs; the rule below is the backstop for a visitor with JavaScript
+ * off, and simply gives every token the theme darkens its light value.
+ */
+html[data-theme="dark"] {
+  color-scheme: light;
+  --pst-color-primary-bg: #d0ecf1;
+  --pst-color-secondary-bg: #e0c7ff;
+  --pst-color-accent: #c132af;
+  --pst-color-accent-bg: #f8dff5;
+  --pst-color-info-bg: #dce7fc;
+  --pst-color-warning-bg: #f8e3d0;
+  --pst-color-success-bg: #d6ece1;
+  --pst-color-attention: var(--pst-color-warning);
+  --pst-color-attention-bg: var(--pst-color-warning-bg);
+  --pst-color-danger-bg: #f9e1e4;
+  --pst-color-text-base: #222832;
+  --pst-color-text-muted: #48566b;
+  --pst-color-heading-color: #fff;
+  --pst-color-shadow: rgba(0,0,0,.1);
+  --pst-color-border: #d1d5da;
+  --pst-color-border-muted: rgba(23,23,26,.2);
+  --pst-color-blockquote-notch: #677384;
+  --pst-color-inline-code: #912583;
+  --pst-color-inline-code-links: #085d6c;
+  --pst-color-target: #f3cf95;
+  --pst-color-table: #14181e;
+  --pst-color-table-row-hover-bg: #b780ff;
+  --pst-color-table-inner-border: #e5e7ea;
+  --pst-color-background: var(--gb-paper);
+  --pst-color-on-background: var(--gb-paper);
+  --pst-color-surface: #ffffff;
+  --pst-color-on-surface: #222832;
+  --pst-color-link: var(--pst-color-primary);
+  --pst-color-link-hover: var(--pst-color-secondary);
+  --pst-color-table-outer-border: var(--pst-color-surface);
+  --pst-color-table-heading-bg: var(--pst-color-surface);
+  --pst-color-table-row-zebra-high-bg: var(--pst-color-on-background);
+  --pst-color-table-row-zebra-low-bg: var(--pst-color-surface);
+  --pst-color-primary: #176de8;
+  --pst-color-primary-text: #fff;
+  --pst-color-primary-highlight: #053f49;
+  --pst-color-secondary: #e89217;
+  --pst-color-secondary-text: #fff;
+  --pst-color-secondary-highlight: #591bc2;
+  --pst-color-success: #00843f;
+  --pst-color-success-text: #fff;
+  --pst-color-success-highlight: #00381a;
+  --pst-color-info: #276be9;
+  --pst-color-info-text: #fff;
+  --pst-color-info-highlight: #124ab1;
+  --pst-color-warning: #f66a0a;
+  --pst-color-warning-text: #14181e;
+  --pst-color-warning-highlight: #ad4a06;
+  --pst-color-danger: #d72d47;
+  --pst-color-danger-text: #fff;
+  --pst-color-danger-highlight: #9a1d30;
+  --pst-color-light: #f3f4f5;
+  --pst-color-light-text: #14181e;
+  --pst-color-light-highlight: #c9ced2;
+  --pst-color-muted: #29313d;
+  --pst-color-muted-text: #fff;
+  --pst-color-muted-highlight: #0a0c0f;
+  --pst-color-dark: #222832;
+  --pst-color-dark-text: #fff;
+  --pst-color-dark-highlight: #030404;
+  --pst-color-black: #14181e;
+  --pst-color-black-text: #fff;
+  --pst-color-black-highlight: #000;
+  --pst-color-white: #fff;
+  --pst-color-white-text: #14181e;
+  --pst-color-white-highlight: #d9d9d9;
+}
