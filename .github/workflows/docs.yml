@@ -1,0 +1,79 @@
+# Build the documentation and publish it to GitHub Pages.
+#
+# The build is unusually cheap for a PyTorch project because nothing here
+# imports the package: conf.py reads the version out of geobrain/_version.py
+# as text, and there is no autodoc, so the job installs five pure-Python
+# packages and runs one command. It does not need torch and does not need
+# geobrain to be installable.
+#
+# Versions are pinned on purpose. This repository has no other CI, so a
+# floating toolchain would mean a Sphinx release could turn the site red on
+# a day nobody was working on it, with -W turning any new warning into a
+# failure. Bump these deliberately.
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deployment finish rather than cancelling it: a half-applied
+# Pages deployment is worse than a slightly stale one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the documentation toolchain
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            sphinx==7.4.7 \
+            sphinx-book-theme==1.1.4 \
+            myst-parser==3.0.1 \
+            sphinx-design==0.6.1 \
+            sphinx-copybutton==0.5.2
+
+      # -W is the same standard the site is written to: the build is warning
+      # free today, and a broken reference should fail here rather than ship.
+      - name: Build
+        run: python -m sphinx -b html docs docs/_build/html -W --keep-going
+
+      # sphinx.ext.githubpages writes .nojekyll, without which Pages runs the
+      # output through Jekyll and drops _static and _images. Fail loudly here
+      # rather than publish a site with no stylesheet.
+      - name: Check the output is Pages-ready
+        run: |
+          test -f docs/_build/html/.nojekyll
+          test -f docs/_build/html/_static/geobrain.css
+          test -d docs/_build/html/_images
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

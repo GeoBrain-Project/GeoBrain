@@ -191,16 +191,19 @@ examples/
 
 ## Documentation
 
-`docs/` holds a hand-written site covering installation, a quick start,
-the architecture and this gallery, built with Sphinx:
+**[https://geobrain-project.github.io/GeoBrain/](https://geobrain-project.github.io/GeoBrain/)**
+
+A hand-written site covering installation, a quick start, the architecture
+and the gallery. Every code block in it is run and checked against the
+version of `geobrain` sitting beside it, and it is rebuilt from `docs/` on
+every push to `main`.
+
+To build it yourself:
 
 ```bash
 pip install sphinx sphinx-book-theme myst-parser sphinx-design sphinx-copybutton
 sphinx-build -b html docs docs/_build/html
 ```
-
-Every code block in it is run and checked against the version of `geobrain`
-sitting beside it.
 
 ---
 

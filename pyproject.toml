@@ -72,7 +72,7 @@ all = [
 
 [project.urls]
 Homepage = "https://github.com/GeoBrain-Project/GeoBrain"
-Documentation = "https://github.com/GeoBrain-Project/GeoBrain/tree/main/docs"
+Documentation = "https://geobrain-project.github.io/GeoBrain/"
 Repository = "https://github.com/GeoBrain-Project/GeoBrain"
 Issues = "https://github.com/GeoBrain-Project/GeoBrain/issues"
 
