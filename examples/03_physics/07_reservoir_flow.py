@@ -294,10 +294,15 @@ ax.annotate("well cells run off this scale", xy=(0.03, 0.04),
 #
 # Time is the subject here: which producer the water reaches first is the
 # whole result, and no still frame carries it.
-anim_fig, anim_ax = figure(1, 1, panel_w=6.6, panel_h=3.6)
+# The canvas matches the FWI animation's so the two sit side by side in the
+# README at one size. The map keeps its own proportions inside it: a 900 by
+# 540 m field stretched to fill a 2.4:1 canvas reads half again as wide as it
+# is, and a map that lies about shape is worse than one with space beside it.
+anim_fig, anim_ax = figure(1, 1, panel_w=8.6, panel_h=3.6)
 anim_frames = list(range(0, NSTEP + 1, max(1, NSTEP // 28)))
 anim_image = field(anim_ax, sw_series[0].detach().reshape(NY, NX).numpy(),
-                   cmap=CMAP_MODEL, vmin=SWC, vmax=1.0 - SOR, **MAP)
+                   cmap=CMAP_MODEL, vmin=SWC, vmax=1.0 - SOR,
+                   aspect="equal", **MAP)
 anim_fig.colorbar(anim_image, ax=anim_ax, label=r"$S_w$ [-]")
 draw_wells(anim_ax)
 

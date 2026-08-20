@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use GeoBrain in your research, please cite it as below."
+message: "If you use GeoBrain in your research, please cite the software below. The Bayesian machinery follows the review in `references`."
 title: "GeoBrain: An End-to-End Differentiable Platform for Integrated Subsurface Modeling"
 abstract: >-
   GeoBrain is an open, modular platform for Geoscientific Bayesian Reasoning
@@ -30,3 +30,26 @@ keywords:
   - electromagnetics
   - reservoir simulation
   - PyTorch
+
+references:
+  - type: article
+    title: "Bayesian Inference for Subsurface Geophysical Inverse Problems"
+    authors:
+      - family-names: Liu
+        given-names: Mingliang
+      - family-names: Grana
+        given-names: Dario
+      - family-names: Mosegaard
+        given-names: Klaus
+      - family-names: Sen
+        given-names: "Mrinal K."
+      - family-names: Xu
+        given-names: Min
+      - family-names: Mukerji
+        given-names: Tapan
+    journal: "Reviews of Geophysics"
+    volume: 64
+    issue: 1
+    start: e2025RG000884
+    year: 2026
+    doi: "10.1029/2025RG000884"
