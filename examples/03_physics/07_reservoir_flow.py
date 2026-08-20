@@ -10,12 +10,13 @@ than the ones the author wanted.
 
 The result is the working rule of waterflooding: SWEEP IS DECIDED BY THE
 PERMEABILITY FIELD, NOT BY THE WELL PATTERN. Four producers arranged
-symmetrically around one injector produce four different histories,
-because the high-permeability streaks between them are not symmetric.
-One of them breaks through at 300 days and finishes at 39% water cut;
-the other three are still dry when the run ends, and their final oil
-rates differ from each other by a factor of 1.6. Nothing distinguishes
-those wells except which beds the water found on the way to them.
+symmetrically around one injector all see water within 1200 days, and
+every one of them sees it on its own schedule: the north-east well at
+300 days, the north-west at 540, and the two southern wells not until
+720. By the end their water cuts run from 48% to 80%. Nothing
+distinguishes those wells except which beds the water found on the way
+to them, and the spread in breakthrough time is the reading that a
+symmetric pattern cannot give you.
 
 The last panel is why the physics being differentiable matters here. The
 march is an implicit Newton solve at every timestep, and it carries an
@@ -40,13 +41,14 @@ APIs featured:
       WellObservationOperator for per-step rates
     - _models.correlated_fields for the permeability
 
-Expected runtime: < 4 min.
+Expected runtime: < 6 min.
 
 Outputs:
     out/07_reservoir_flow.png: permeability, the swept saturation at
     the end of the run, the water cut per well, and the adjoint
     sensitivity.
-    out/07_flood.gif: the flood front advancing through the streaks.
+    out/07_flood.gif: the flood front advancing through the streaks,
+    beside the water cut it produces well by well.
 
 Author: Mingliang Liu (mingliangliu@sdu.edu.cn)
 Version: 0.2.0
@@ -101,7 +103,7 @@ NX, NY, DX, DZ = 20, 12, 45.0, 10.0           # 900 x 540 m, 10 m thick
 N_CELLS = NX * NY
 P_INIT = 25.0e6
 DAY = 86400.0
-NSTEP, DT = 15, 30.0 * DAY                    # 450 days in monthly steps
+NSTEP, DT = 20, 60.0 * DAY                    # 1200 days, two-month steps
 PORO, SWC, SOR = 0.2, 0.2, 0.2
 K_BG = 120e-15
 
@@ -186,7 +188,7 @@ wells = WellGroup([
 print(f"[3] five-spot: injector at 27.5 MPa, four producers at 22.5 MPa; "
       f"Peaceman well index {WI:.2e} m3")
 
-# %% 4. March 450 days, keeping every step ---------------------------------
+# %% 4. March 1200 days, keeping every step ---------------------------------
 log_k = perm_grid.reshape(-1).log().clone().requires_grad_(True)
 model = build_model(log_k.exp())
 march = TransientFlowOperator(FlowEvolutionOperator(
@@ -294,23 +296,58 @@ ax.annotate("well cells run off this scale", xy=(0.03, 0.04),
 #
 # Time is the subject here: which producer the water reaches first is the
 # whole result, and no still frame carries it.
-# The canvas matches the FWI animation's so the two sit side by side in the
-# README at one size. The map keeps its own proportions inside it: a 900 by
-# 540 m field stretched to fill a 2.4:1 canvas reads half again as wide as it
-# is, and a map that lies about shape is worse than one with space beside it.
-anim_fig, anim_ax = figure(1, 1, panel_w=8.6, panel_h=3.6)
+# Two panels, because the map alone cannot carry the result. A 900 by 540 m
+# field has to keep its proportions, so on a canvas wide enough to read
+# comfortably the map fills only part of the frame; the water cut fills the
+# rest and states plainly what the colours imply, which producer the water
+# reaches and when.
+# The map carries the result and the curve reads it back, so the map gets
+# the larger share. It also needs the room more: holding its own
+# proportions makes it width-limited, so every pixel of panel width buys
+# height, while the curve fills whatever box it is given.
+anim_fig, anim_axes = figure(1, 2, panel_w=4.3, panel_h=3.6,
+                             gridspec_kw={"width_ratios": [1.7, 1]})
+anim_map, anim_curve = anim_axes
 anim_frames = list(range(0, NSTEP + 1, max(1, NSTEP // 28)))
-anim_image = field(anim_ax, sw_series[0].detach().reshape(NY, NX).numpy(),
+
+anim_image = field(anim_map, sw_series[0].detach().reshape(NY, NX).numpy(),
                    cmap=CMAP_MODEL, vmin=SWC, vmax=1.0 - SOR,
                    aspect="equal", **MAP)
-anim_fig.colorbar(anim_image, ax=anim_ax, label=r"$S_w$ [-]")
-draw_wells(anim_ax)
+# The map holds its own proportions, so it is shorter than the panel it
+# sits in. A bar drawn to the panel would stand half again as tall as the
+# thing it describes, which reads as a second, larger object.
+anim_fig.colorbar(anim_image, ax=anim_map, label=r"$S_w$ [-]",
+                  fraction=0.046, pad=0.04, shrink=0.78)
+draw_wells(anim_map)
+
+# The curves are drawn once over the whole history and revealed a step at a
+# time, so the axes never rescale under the reader.
+cut_pct = (water_cut * 100.0).detach().numpy()
+day_axis = days.numpy()
+anim_lines = [anim_curve.plot([], [], color=PALETTE[k], lw=2.0, label=name)[0]
+              for k, name in enumerate(PROD_NAMES)]
+anim_curve.set(xlim=(0.0, float(day_axis[-1])),
+               ylim=(0.0, max(1.0, float(cut_pct.max())) * 1.15),
+               xlabel="Time [days]", ylabel="Water cut [%]",
+               title="Water cut")
+anim_curve.legend(fontsize=6.5, loc="upper left", frameon=False,
+                  handlelength=1.2, borderpad=0.2, labelspacing=0.25)
+
+# This animation and the FWI one sit side by side in the README, so their
+# content has to start and end at the same place inside the frame. The
+# frames already match (both 8.6 by 3.6 inches); what differs is what the
+# automatic layout does with them, because one figure is a map with a
+# colour bar and this one is a map, a bar and a curve. Constraining the
+# layout to this rectangle lands both on a 51 pixel margin either side.
+anim_fig.get_layout_engine().set(rect=(0.009, 0.0, 0.94, 1.0))
 
 
 def draw_flood(index: int) -> None:
     step = anim_frames[index]
     anim_image.set_data(sw_series[step].detach().reshape(NY, NX).numpy())
-    anim_ax.set_title(f"Water saturation, day {step * DT / DAY:.0f}")
+    anim_map.set_title(f"Water saturation, day {step * DT / DAY:.0f}")
+    for k, line in enumerate(anim_lines):
+        line.set_data(day_axis[:step + 1], cut_pct[:step + 1, k])
 
 
 animation(anim_fig, draw_flood, len(anim_frames), OUT / "07_flood.gif")

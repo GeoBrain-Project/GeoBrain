@@ -18,16 +18,10 @@
 By combining **differentiable physics**, **Bayesian inference**, and **deep learning**, GeoBrain enables end-to-end workflows for subsurface characterization, from geomodeling and rock physics to geophysical simulation and inversion. Every forward model is a composable operator, every operator declares how it differentiates, and the same problem object serves a deterministic optimiser and a posterior sampler alike.
 
 
-<p align="center">
-<img src="examples/03_physics/out/01_fwi_climb.gif" width="430" height="180">
-&nbsp;
-<img src="examples/03_physics/out/07_flood.gif" width="430" height="180">
-</p>
-<p align="center">
-<b>Seismic: full-waveform inversion, band by band</b>
-&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-<b>Flow: two phases, four wells, one adjoint</b>
-</p>
+<table align="center"><tr>
+<td align="center" width="50%"><img src="examples/03_physics/out/01_fwi_climb.gif" width="100%"><br><b>Seismic: full-waveform inversion, band by band</b><br></td>
+<td align="center" width="50%"><img src="examples/03_physics/out/07_flood.gif" width="100%"><br><b>Flow: two phases, four wells, one adjoint</b><br></td>
+</tr></table>
 
 
 ### The core architecture
